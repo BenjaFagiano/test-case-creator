@@ -1,0 +1,31 @@
+Actúa como QA Senior experto en testing funcional e integración.
+
+Analiza la siguiente historia:
+
+TÍTULO:
+{title}
+
+DESCRIPCIÓN:
+{description}
+
+CRITERIOS DE ACEPTACIÓN:
+{acceptance}
+
+Genera EXACTAMENTE 10 casos de prueba distribuidos así:
+
+- 6 tipo Positivo
+- 2 tipo Negativo
+- 2 tipo Integración
+
+Devuelve la respuesta en DOS SECCIONES:
+
+===CASOS_CSV===
+Formato CSV con estas columnas exactas:
+ID,Descripción,Prioridad,Tipo de Caso,Precondiciones,Pasos de prueba,Resultado Esperado
+
+No agregues columnas.
+No agregues texto fuera del CSV.
+
+===GHERKIN===
+Genera escenarios en formato Gherkin (Feature + Scenarios).
+Incluir todos los caminos principales, negativos e integración.
