@@ -1,16 +1,202 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Generador de Casos QA</title>
+    <title>QA Test Case Generator</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #282a36;
+            color: #f8f8f2;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 600px;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        h2 {
+            color: #bd93f9;
+            margin-bottom: 40px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            margin-left: 10px;
+            background-color: #44475a;
+            color: white;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 5px #bd93f9;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            background-color: #50fa7b;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .error {
+            color: #ff5555;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-top: 50px;
+            text-align: left;
+        }
+
+        .terminal {
+            background-color: #1e1f29;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .history-button {
+            background: none;
+            border: none;
+            color: #8be9fd;
+            font-family: monospace;
+            cursor: pointer;
+            display: block;
+            padding: 3px 0;
+            text-align: left;
+        }
+
+        .history-button:hover {
+            text-decoration: underline;
+        }
+        .navbar {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #1e1f29;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-sizing: border-box;
+        }
+
+        .nav-title {
+            color: #bd93f9;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #8be9fd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+    </style>
 </head>
-<body style="font-family: Arial; padding: 40px;">
-    <h2>Generador de Casos de Prueba</h2>
+
+<body>
+<div class="navbar">
+    <div class="nav-title">Test Case Generator</div>
+    <div>
+        <a href="/style" class="nav-link">Style Training</a>
+    </div>
+</div>
+<div class="container">
+
+    <h2>QA Test Case Generator</h2>
 
     <form action="/generate" method="post">
-        <label>Issue Key:</label><br><br>
-        <input type="text" name="issue_key" placeholder="QM-1486" required>
-        <br><br>
-        <button type="submit">Generar Excel</button>
+
+        <div class="terminal-input-wrapper">
+            <span class="terminal-prefix">bfagiano@qa:~$ generate </span>
+            <input type="text"
+                name="issue_key"
+                class="terminal-input"
+                placeholder="QM-1486"
+                value="{{ issue_key or '' }}"
+                required>
+        </div>
+
+        {% if error_message %}
+            <div class="error">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        <button type="submit">Generate Excel</button>
+
     </form>
+
+    <div class="section">
+        <h3 style="color:#ffb86c;">Últimas Issues</h3>
+
+        {% if history %}
+            {% for issue in history %}
+                <button class="history-button" type="button" onclick="fillIssue('{{ issue }}')">
+                    {{ issue }}
+                </button>
+            {% endfor %}
+        {% else %}
+            <div class="terminal">No hay historial aún</div>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h3 style="color:#ffb86c;">Historial de ejecuciones</h3>
+
+        {% if execution_log %}
+            <div class="terminal">
+                {% for log in execution_log %}
+                    {{ log.timestamp }} |
+                    {{ log.issue }} |
+                    {{ log.cases_generated }} casos |
+                    {{ log.priority }} |
+                    {{ log.model }} <br>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="terminal">No hay ejecuciones aún</div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+function fillIssue(issue) {
+    document.querySelector('input[name="issue_key"]').value = issue;
+}
+</script>
+
 </body>
 </html>
